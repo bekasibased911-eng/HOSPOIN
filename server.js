@@ -1,11 +1,19 @@
 
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+// Tampilkan website dari folder public
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // Izinkan website Go Live mengakses API
 app.use((req, res, next) => {
@@ -85,6 +93,12 @@ app.post("/api/chat", async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log("Housepoint AI API aktif di port 3000");
-});
+// Jalankan lokal jika bukan di Vercel
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log("Housepoint AI API aktif di port " + PORT);
+    });
+}
+
+// Export untuk Vercel
+module.exports = app;
