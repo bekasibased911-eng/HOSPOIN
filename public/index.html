@@ -154,12 +154,49 @@
 <div class="modalback" id="modalback"><div class="modal"><h3 id="modalTitle">Tambah Data</h3><form id="modalForm"><label class="field">Nama<input id="newName" required placeholder="Masukkan nama"></label><label class="field">Keterangan<input id="newInfo" placeholder="Kategori / detail"></label><label class="field">Jumlah / Harga<input id="newValue" placeholder="Contoh: 10 atau 25000"></label><div class="modalactions"><button type="button" class="btn light" onclick="closeModal()">Batal</button><button class="btn" type="submit">Simpan</button></div></form></div></div>
 <script>
 
-const DEMO_EMAIL='admin@housepoint.com', DEMO_PASSWORD='housepoint123';
-function enterApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('mainApp').classList.add('logged-in')}
-function logout(){sessionStorage.removeItem('housepointLoggedIn');document.getElementById('mainApp').classList.remove('logged-in');document.getElementById('loginScreen').style.display='flex';document.getElementById('loginForm').reset();document.getElementById('loginError').style.display='none'}
-function togglePassword(){const p=document.getElementById('loginPassword');const b=document.querySelector('.password-toggle');p.type=p.type==='password'?'text':'password';b.textContent=p.type==='password'?'Lihat':'Sembunyikan'}
-document.getElementById('loginForm').addEventListener('submit',function(e){e.preventDefault();const email=document.getElementById('loginEmail').value.trim();const password=document.getElementById('loginPassword').value; if(email===DEMO_EMAIL&&password===DEMO_PASSWORD){sessionStorage.setItem('housepointLoggedIn','yes');document.getElementById('loginError').style.display='none';enterApp()}else{document.getElementById('loginError').style.display='block'}});
-if(sessionStorage.getItem('housepointLoggedIn')==='yes')enterApp();
+const DEMO_EMAIL = 'admin@housepoint.com';
+const DEMO_PASSWORD = 'housepoint123';
+
+function enterApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainApp').classList.add('logged-in');
+}
+
+function logout() {
+    sessionStorage.removeItem('housepointLoggedIn');
+    document.getElementById('mainApp').classList.remove('logged-in');
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginForm').reset();
+    document.getElementById('loginError').style.display = 'none';
+}
+
+function togglePassword() {
+    const passwordInput = document.getElementById('loginPassword');
+    const toggleButton = document.querySelector('.password-toggle');
+
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    toggleButton.textContent = passwordInput.type === 'password' ? 'Lihat' : 'Sembunyikan';
+}
+
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value.trim();
+    const loginError = document.getElementById('loginError');
+
+    if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
+        sessionStorage.setItem('housepointLoggedIn', 'yes');
+        loginError.style.display = 'none';
+        enterApp();
+    } else {
+        loginError.style.display = 'block';
+    }
+});
+
+if (sessionStorage.getItem('housepointLoggedIn') === 'yes') {
+    enterApp();
+}
 
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id))}
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
